@@ -2,5 +2,8 @@ from ..base_model import BaseModel
 
 
 class BaseServiceModel(BaseModel):
+    def __init__(self, external_id: int):
+        self.external_id = external_id
+
     def __repr__(self):
-        return f"<{self.__class__.__name__}(id={self.user_id}, {self.__class__.__name__.lower()}_id={getattr(self, self.__class__.__name__.lower())})>"
+        return f"<Service={self.__class__.__name__}>"

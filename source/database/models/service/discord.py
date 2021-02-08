@@ -9,9 +9,10 @@ from .base_model import BaseServiceModel
 class Discord(Base, BaseServiceModel):
     __tablename__ = 'discords'
 
-    user_id = Column(Integer, ForeignKey(User.id), primary_key=True)
+    external_id = Column(Integer, ForeignKey(User.id), primary_key=True)
     discord_id = Column(Integer, unique=True)
     user = relationship('User', backref='discord_id')
 
-    def __init__(self, discord_id: int):
-        self.discord_id = discord_id
+    def __init__(self, external_id: int, discord_id: int):
+        super().__init__(external_id=external_id)
+        self.discord_id = int(discord_id)

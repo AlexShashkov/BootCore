@@ -3,4 +3,6 @@ import json
 
 class BaseModel:
     def json(self) -> str:
-        return json.dumps(vars(self), ensure_ascii=False)
+        _vars = vars(self)
+        _vars.pop('_sa_instance_state')
+        return json.dumps(_vars, ensure_ascii=False)

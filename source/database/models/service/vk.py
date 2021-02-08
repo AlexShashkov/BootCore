@@ -9,9 +9,10 @@ from .base_model import BaseServiceModel
 class VK(Base, BaseServiceModel):
     __tablename__ = 'vks'
 
-    user_id = Column(Integer, ForeignKey(User.id), primary_key=True)
+    external_id = Column(Integer, ForeignKey(User.id), primary_key=True)
     vk_id = Column(Integer, unique=True)
     user = relationship('User', backref='vk_id')
 
-    def __init__(self, vk_id: int):
-        self.vk_id = vk_id
+    def __init__(self, external_id: int, vk_id: int):
+        super().__init__(external_id=external_id)
+        self.vk_id = int(vk_id)

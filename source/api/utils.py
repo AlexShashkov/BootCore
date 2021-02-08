@@ -36,3 +36,24 @@ class Reply:
             kwargs = {'status': False, 'error': 'Forbidden'}
         kwargs['status'] = False
         return json.dumps(kwargs), 403
+
+    @staticmethod
+    def conflict(**kwargs) -> tuple:
+        if not kwargs:
+            kwargs = {'status': False, 'error': 'Conflict'}
+        kwargs['status'] = False
+        return json.dumps(kwargs), 409
+
+    @staticmethod
+    def not_found(**kwargs) -> tuple:
+        if not kwargs:
+            kwargs = {'status': False, 'error': 'Not found'}
+        kwargs['status'] = False
+        return json.dumps(kwargs), 404
+
+    @staticmethod
+    def unknown_error(**kwargs) -> tuple:
+        if not kwargs:
+            kwargs = {'status': False, 'error': 'Something went wrong...'}
+        kwargs['status'] = False
+        return json.dumps(kwargs), 520

@@ -2,5 +2,9 @@
   "api": {
     "secret_code": "",
     "secret_key": ""
+  },
+  "mail": {
+    "api_key": "",
+    "api_secret": ""
   }
 }
