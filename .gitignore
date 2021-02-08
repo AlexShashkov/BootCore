@@ -1,0 +1,5 @@
+wvenv/
+venv/
+.idea/
+config.json
+test.db
