@@ -4,6 +4,7 @@ services:
     image: bootcore
     build: .
     command: python3 main.py
+    network_mode: host
 
-volumes:
-  - /opt/bin:/usr/bin
+    volumes:
+      - /opt/bin:/usr/bin
