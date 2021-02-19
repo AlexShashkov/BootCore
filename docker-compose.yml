@@ -7,4 +7,4 @@ services:
     network_mode: host
 
     volumes:
-      - /opt/bin:/usr/bin
+      - /usr/bin:/opt/bin
