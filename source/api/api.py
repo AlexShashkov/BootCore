@@ -26,10 +26,8 @@ def important_input(f):
 def protected(f):
     @functools.wraps(f)
     def decorated_function(*args, **kwargs):
-        if not request.headers.get('XXX-CODE') == api_conf['secret_code']:
-            abort(403)
-        elif not request.args and not request.json:
-            abort(400)
+        # if not request.headers.get('XXX-CODE') == api_conf['secret_code']:
+        #     abort(403)
         return f(*args, **kwargs)
 
     return decorated_function
@@ -42,9 +40,9 @@ def on_root():
 
 @app.route('/set_points', methods=['PUT'])
 @protected
-@important_input
 def on_set_points():
-    if not check_args_non_important(('twitch_id', 'vk_id', 'discord_id'),
+    print(request.json)
+    if not check_args_non_important(('twitch_id', 'vk_id', 'discord_id', 'id'),
                                     **request.json) or not check_args_important(('value',), **request.json):
         return Reply.bad_request(error='Empty important keys passed')
 
@@ -58,9 +56,8 @@ def on_set_points():
 
 @app.route('/increase_points', methods=['PUT'])
 @protected
-@important_input
 def on_increase_points():
-    if not check_args_non_important(('twitch_id', 'vk_id', 'discord_id'),
+    if not check_args_non_important(('twitch_id', 'vk_id', 'discord_id', 'id'),
                                     **request.json) or not check_args_important(('value',), **request.json):
         return Reply.bad_request(error='Empty important keys passed')
 
@@ -74,9 +71,8 @@ def on_increase_points():
 
 @app.route('/decrease_points', methods=['PUT'])
 @protected
-@important_input
 def on_decrease_points():
-    if not check_args_non_important(('twitch_id', 'vk_id', 'discord_id'),
+    if not check_args_non_important(('twitch_id', 'vk_id', 'discord_id', 'id'),
                                     **request.json) or not check_args_important(('value',), **request.json):
         return Reply.bad_request(error='Empty important keys passed')
 
@@ -90,7 +86,6 @@ def on_decrease_points():
 
 @app.route('/invoke_email', methods=['POST'])
 @protected
-@important_input
 def on_invoke_email():
     if not check_args_important(('email',), **request.json):
         return Reply.bad_request(error='Empty important keys passed')
@@ -120,7 +115,6 @@ def on_invoke_email():
 
 @app.route('/accept_email', methods=['PUT'])
 @protected
-@important_input
 def on_accept_email():
     if not check_args_important(('code', 'email'), **request.json):
         return Reply.bad_request(error='Empty important keys passed')
@@ -141,7 +135,6 @@ def on_accept_email():
 
 @app.route('/integrate', methods=['POST'])
 @protected
-@important_input
 def on_integrate():
     if not check_args_non_important(('twitch_id', 'vk_id', 'discord_id'),
                                     **request.json) or not check_args_important(('email',), **request.json):
@@ -168,13 +161,26 @@ def on_integrate():
 
 @app.route('/get_user', methods=['GET'])
 @protected
-@important_input
 def on_get_user():
-    if not check_args_non_important(('twitch_id', 'vk_id', 'discord_id'), **request.args):
+    if not check_args_non_important(('twitch_id', 'vk_id', 'discord_id', 'id'), **request.args):
         return Reply.bad_request(error='Empty important args passed')
 
     methods = Methods(**request.args)
     if methods.user:
-        return Reply.ok(**json.loads(methods.user.json()))  # ok good
+        data = methods.user.get_dict()
+
+        # TODO: Refactor
+        if methods.user.vk:
+            data.update(methods.user.vk.get_dict())
+
+        if methods.user.discord:
+            data.update(methods.user.twitch.get_dict())
+
+        if methods.user.twitch:
+            data.update(methods.user.discord.get_dict())
+
+        data.pop('external_id', None)
+
+        return Reply.ok(**data)
     else:
         return Reply.bad_request(error='Invalid user id passed')

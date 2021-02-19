@@ -6,7 +6,7 @@ from .utils import *
 class Methods:
     def __init__(self, **kwargs):
         self.__session = Session()
-        self.user = self.get_user_by_service(**kwargs) if kwargs else None
+        self.user = self.get_user_by_id(**kwargs) if kwargs else None
 
     def add_user(self, user: User) -> None:
         self.__session.add(user)
@@ -29,7 +29,7 @@ class Methods:
         self.__session.delete(user)
         self.__session.commit()
 
-    def get_user_by_service(self, **kwargs) -> User:
+    def get_user_by_id(self, **kwargs) -> User:
         result = None
 
         if kwargs.get('vk_id'):
@@ -40,8 +40,14 @@ class Methods:
         elif kwargs.get('twitch_id'):
             result = [x for x in
                       self.__session.query(service.Twitch).filter(service.Twitch.twitch_id == kwargs['twitch_id'])]
+        elif kwargs.get('id'):
+            result = [x for x in self.__session.query(User).filter(User.id == kwargs.get('id'))]
 
-        return result[0].user if result else None
+        if result:
+            if issubclass(result[0].__class__, BaseServiceModel):
+                return self.get_user_by_id(id=result[0].external_id)
+            else:
+                return result[0]
 
     def get_user_by_email(self, email: str) -> User:
         result = [x for x in self.__session.query(User).filter(User.email == email)]

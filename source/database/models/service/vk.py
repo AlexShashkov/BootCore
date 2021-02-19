@@ -1,5 +1,4 @@
 from sqlalchemy import Column, Integer, ForeignKey
-from sqlalchemy.orm import relationship
 
 from source.database import Base
 from source.database.models.user import User
@@ -11,7 +10,6 @@ class VK(Base, BaseServiceModel):
 
     external_id = Column(Integer, ForeignKey(User.id), primary_key=True)
     vk_id = Column(Integer, unique=True)
-    user = relationship('User', backref='vk_id')
 
     def __init__(self, external_id: int, vk_id: int):
         super().__init__(external_id=external_id)

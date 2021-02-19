@@ -1,8 +1,16 @@
-import json
+from copy import copy
 
 
 class BaseModel:
-    def json(self) -> str:
-        _vars = vars(self)
+    def get_dict(self) -> dict:
+        _vars = copy(vars(self))
         _vars.pop('_sa_instance_state')
-        return json.dumps(_vars, ensure_ascii=False)
+        # for var in list(_vars):
+        #     if issubclass(_vars[var].__class__, BaseModel):
+        #         _vars[var] = _vars[var].get_dict()
+        # TODO: Refactor
+        _vars.pop('vk', None)
+        _vars.pop('discord', None)
+        _vars.pop('twitch', None)
+
+        return _vars

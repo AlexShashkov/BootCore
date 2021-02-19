@@ -1,5 +1,5 @@
 from sqlalchemy import Column, String, BigInteger, Integer
-
+from sqlalchemy.orm import relationship
 from .base_model import BaseModel
 from .. import Base
 
@@ -13,6 +13,10 @@ class User(Base, BaseModel):
     registered_ts = Column(BigInteger, nullable=False)
     status = Column(String, nullable=False, default='inactive')
     note = Column(String, nullable=True)
+
+    vk = relationship('VK', backref='vk', uselist=False)
+    discord = relationship('Discord', backref='discord', uselist=False)
+    twitch = relationship('Twitch', backref='twitch', uselist=False)
 
     def __init__(self, registered_ts: int, status='inactive', email=None, points=0, note=None):
         self.points = points
