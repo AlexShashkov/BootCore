@@ -10,7 +10,7 @@ def check_args_important(_args, **kwargs):
 
 def check_args_non_important(_args, **kwargs):
     for x in _args:
-        if kwargs.get(x):
+        if kwargs.get(x) or kwargs.get(x) == 0:
             return True
     return False
 

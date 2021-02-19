@@ -26,8 +26,8 @@ def important_input(f):
 def protected(f):
     @functools.wraps(f)
     def decorated_function(*args, **kwargs):
-        # if not request.headers.get('XXX-CODE') == api_conf['secret_code']:
-        #     abort(403)
+        if not request.headers.get('XXX-CODE') == api_conf['secret_code']:
+            abort(403)
         return f(*args, **kwargs)
 
     return decorated_function
@@ -41,7 +41,6 @@ def on_root():
 @app.route('/set_points', methods=['PUT'])
 @protected
 def on_set_points():
-    print(request.json)
     if not check_args_non_important(('twitch_id', 'vk_id', 'discord_id', 'id'),
                                     **request.json) or not check_args_important(('value',), **request.json):
         return Reply.bad_request(error='Empty important keys passed')

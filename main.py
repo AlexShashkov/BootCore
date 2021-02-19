@@ -1,3 +1,3 @@
 from source.api.api import *
 
-app.run(debug=True)
+app.run()
