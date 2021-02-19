@@ -1,5 +1,4 @@
 import functools
-# from ..mail import Mail
 from datetime import datetime
 
 from flask import request, abort
@@ -10,6 +9,7 @@ from . import app
 from .utils import *
 from ..database.methods import Methods
 from ..database.models import *
+from ..mail import Mail
 from ..utils import *
 
 
@@ -86,42 +86,44 @@ def on_decrease_points():
 @app.route('/invoke_email', methods=['POST'])
 @protected
 def on_invoke_email():
-    if not check_args_important(('email',), **request.json):
+    data = request.json
+
+    if not check_args_important(('email',), **data):
         return Reply.bad_request(error='Empty important keys passed')
 
     code = None
     methods = Methods()
-    if methods.is_email_exists(request.json['email']) and not request.json.get('resend'):
+    if methods.is_email_exists(data['email']) and not data.get('resend'):
         return Reply.bad_request(error='Email already exists')
-    elif request.json.get('resend'):
-        user = methods.get_user_by_email(request.json['email'])
+    elif data.get('resend'):
+        user = methods.get_user_by_email(data['email'])
         if not user or not user.note:
             return Reply.bad_request(error='Invalid user')
         code = user.note
     elif not methods.user or methods.user.status == 'inactive':
         code = generate_verification_code()
-        user = User(email=request.json['email'], registered_ts=int(datetime.now(timezone('Europe/Moscow')).timestamp()),
+        user = User(email=data['email'], registered_ts=int(datetime.now(timezone('Europe/Moscow')).timestamp()),
                     note=code)
         methods.add_user(user)
     else:
         return Reply.conflict(error='User already activated')
 
-    # mail_result = Mail.send_confirmation(request.json['email'], code)
-    # if mail_result[0] != 200:
-    #     return Reply.unknown_error(error=str(mail_result[1]))
-    return Reply.ok(code=code)  # Only for tests
+    Mail.send_confirmation(to=data['email'], code=code)
+    return Reply.ok()
 
 
 @app.route('/accept_email', methods=['PUT'])
 @protected
 def on_accept_email():
-    if not check_args_important(('code', 'email'), **request.json):
+    data = request.json
+
+    if not check_args_important(('code', 'email'), **data):
         return Reply.bad_request(error='Empty important keys passed')
 
     methods = Methods()
-    user = methods.get_user_by_email(request.json['email'])
+    user = methods.get_user_by_email(data['email'])
     if user and user.status == 'inactive':
-        if user.note == request.json['code']:
+        if user.note == data['code']:
             user.note = ''
             user.status = 'active'
             methods.update_user(user)

@@ -1,0 +1,9 @@
+version: "3.7"
+services:
+  core:
+    image: bootcore
+    build: .
+    command: python3 main.py
+
+volumes:
+  - /opt/bin:/usr/bin
