@@ -31,12 +31,12 @@ def protected(f):
     return decorated_function
 
 
-@app.route('/', methods=['GET'])
+@app.route('/api/', methods=['GET'])
 def on_root():
     return Reply.ok()
 
 
-@app.route('/set_points', methods=['PUT'])
+@app.route('/api/set_points', methods=['PUT'])
 @protected
 def on_set_points():
     data = request.json
@@ -57,7 +57,7 @@ def on_set_points():
         return Reply.bad_request(error='Invalid user id passed')
 
 
-@app.route('/increase_points', methods=['PUT'])
+@app.route('/api/increase_points', methods=['PUT'])
 @protected
 def on_increase_points():
     data = request.json
@@ -78,7 +78,7 @@ def on_increase_points():
         return Reply.bad_request(error='Invalid user id passed')
 
 
-@app.route('/decrease_points', methods=['PUT'])
+@app.route('/api/decrease_points', methods=['PUT'])
 @protected
 def on_decrease_points():
     data = request.json
@@ -99,7 +99,7 @@ def on_decrease_points():
         return Reply.bad_request(error='Invalid user id passed')
 
 
-@app.route('/invoke_email', methods=['POST'])
+@app.route('/api/invoke_email', methods=['POST'])
 @protected
 def on_invoke_email():
     data = request.json
@@ -131,7 +131,7 @@ def on_invoke_email():
     return Reply.ok()
 
 
-@app.route('/accept_email', methods=['POST'])  # May be put but post
+@app.route('/api/accept_email', methods=['POST'])  # May be put but post
 @protected
 def on_accept_email():
     data = request.json
@@ -153,7 +153,7 @@ def on_accept_email():
         return Reply.bad_request(error='Invalid email')
 
 
-@app.route('/integrate', methods=['POST'])
+@app.route('/api/integrate', methods=['POST'])
 @protected
 def on_integrate():
     data = request.json
@@ -194,7 +194,7 @@ def on_integrate():
     return Reply.ok()
 
 
-@app.route('/disintegrate', methods=['POST'])
+@app.route('/api/disintegrate', methods=['POST'])
 @protected
 def on_disintegrate():
     data = request.json
@@ -231,7 +231,7 @@ def on_disintegrate():
     return Reply.ok()
 
 
-@app.route('/get_user', methods=['GET'])
+@app.route('/api/get_user', methods=['GET'])
 @protected
 def on_get_user():
     data = request.json
