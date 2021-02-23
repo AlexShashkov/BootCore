@@ -1,6 +1,6 @@
 import json
 
-__version__ = '0.1.0'
+__version__ = '0.1.2'
 
 config = json.load(open('config.json', 'r'))
 api_conf = config['api']

@@ -256,10 +256,10 @@ def on_get_user():
             _user.update(methods.user.vk.get_dict())
 
         if methods.user.discord:
-            _user.update(methods.user.twitch.get_dict())
+            _user.update(methods.user.discord.get_dict())
 
         if methods.user.twitch:
-            _user.update(methods.user.discord.get_dict())
+            _user.update(methods.user.twitch.get_dict())
 
         _user.pop('external_id', None)
 
