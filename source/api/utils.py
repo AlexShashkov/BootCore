@@ -51,3 +51,9 @@ class Reply:
         if not kwargs:
             return json.dumps({'status': False, 'response': {'error': 'Something went wrong...'}}), 520
         return json.dumps({'status': False, 'response': kwargs}), 520
+
+    @staticmethod
+    def failed_dependency(**kwargs) -> tuple:
+        if not kwargs:
+            return json.dumps({'status': False, 'response': {'error': 'Failed dependency'}}), 424
+        return json.dumps({'status': False, 'response': kwargs}), 424

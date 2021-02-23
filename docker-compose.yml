@@ -1,14 +1,8 @@
 version: "3.7"
-volumes:
-  mail:
-    external: true
+
 services:
   core:
     image: bootcore
     build: .
     command: python3 main.py
     network_mode: host
-    volumes:
-      - type: bind
-        source: /usr/bin/mail
-        target: /opt/mail/mail
