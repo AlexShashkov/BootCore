@@ -3,3 +3,8 @@ venv/
 .idea/
 config.json
 test.db
+source/conf.py
+source/index.rst
+make.bat
+Makefile
+build/

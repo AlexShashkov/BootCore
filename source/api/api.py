@@ -10,6 +10,14 @@ from ..mail import Mail
 from ..utils import *
 from ..database.exceptions import *
 
+"""
+.. module:: BootCore
+    :platform: Any
+    :synopsis: REST API module
+
+.. moduleauthor:: icYFTL
+"""
+
 
 def important_input(f):
     @functools.wraps(f)
@@ -146,7 +154,7 @@ def on_accept_email():
             user.note = ''
             user.status = 'active'
             methods.update_user(user)
-            return Reply.ok()
+            return Reply.ok(user_id=user.id)
         else:
             return Reply.bad_request(error='Invalid code')
     else:
@@ -234,9 +242,9 @@ def on_disintegrate():
 @app.route('/api/get_user', methods=['GET'])
 @protected
 def on_get_user():
-    data = request.json
+    data = request.args
 
-    if not check_args_non_important(('twitch_id', 'vk_id', 'discord_id', 'id'), **data):
+    if not check_args_non_important(('twitch_id', 'vk_id', 'discord_id', 'id'), **data):  # TODO: Implement user getting by an email
         return Reply.bad_request(error='Empty important args passed')
 
     methods = Methods(**data)
