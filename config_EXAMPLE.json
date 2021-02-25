@@ -6,5 +6,12 @@
   "mail": {
     "api_key": "",
     "api_host": ""
+  },
+  "database": {
+    "db": "",
+    "user": "",
+    "password": "",
+    "port": 0,
+    "host": ""
   }
 }

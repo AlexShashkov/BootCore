@@ -5,4 +5,5 @@ services:
     image: bootcore
     build: .
     command: python3 main.py
-    network_mode: host
+    ports:
+      - 8711
