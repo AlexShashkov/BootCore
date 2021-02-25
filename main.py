@@ -1,3 +1,3 @@
 from source.api.api import *
 
-app.run('0.0.0.0', 8711, False)
+app.run('localhost', 8711, False)
