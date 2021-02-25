@@ -1,4 +1,4 @@
-from .points_history import Transaction
+from .transaction import Transaction
 from .service import *
 from .user import User
 

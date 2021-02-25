@@ -10,6 +10,7 @@ engine = create_engine('postgresql+psycopg2://{user}:{password}//:@{host}:{port}
     host=db_conf['host'],
     port=db_conf['port']
 ), echo=False)
+
 Base = declarative_base()
 from .models import *
 
