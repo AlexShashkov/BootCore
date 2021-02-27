@@ -57,10 +57,12 @@ def on_set_points():
     if methods.user:
         service = [x.replace('_id', '') for x in list(data) if x in ['twitch_id', 'vk_id', 'discord_id']]
         try:
-            methods.set_points(request.json['value'], service=service[0] if service else None)
+            methods.set_points(int(request.json['value']), service=service[0] if service else None)
         except NotActive:
             return Reply.failed_dependency(error='User is not active')
-        return Reply.ok()
+        except ValueError:
+            return Reply.bad_request(error='Invalid value')
+        return Reply.ok(points=methods.user.points)
     else:
         return Reply.bad_request(error='Invalid user id passed')
 
@@ -78,10 +80,12 @@ def on_increase_points():
     if methods.user:
         service = [x.replace('_id', '') for x in list(data) if x in ['twitch_id', 'vk_id', 'discord_id']]
         try:
-            methods.increase_points(request.json['value'], service=service[0] if service else None)
+            methods.increase_points(int(request.json['value']), service=service[0] if service else None)
         except NotActive:
             return Reply.failed_dependency(error='User is not active')
-        return Reply.ok()
+        except ValueError:
+            return Reply.bad_request(error='Invalid value')
+        return Reply.ok(points=methods.user.points)
     else:
         return Reply.bad_request(error='Invalid user id passed')
 
@@ -99,10 +103,12 @@ def on_decrease_points():
     if methods.user:
         service = [x.replace('_id', '') for x in list(data) if x in ['twitch_id', 'vk_id', 'discord_id']]
         try:
-            methods.decrease_points(request.json['value'], service=service[0] if service else None)
+            methods.decrease_points(int(request.json['value']), service=service[0] if service else None)
         except NotActive:
             return Reply.failed_dependency(error='User is not active')
-        return Reply.ok()
+        except ValueError:
+            return Reply.bad_request(error='Invalid value')
+        return Reply.ok(points=methods.user.points)
     else:
         return Reply.bad_request(error='Invalid user id passed')
 
