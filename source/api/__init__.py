@@ -6,4 +6,4 @@ app.config['SECRET_KEY'] = api_conf['secret_key']
 
 __all__ = ['app']
 
-from .api import *
+from .user import *

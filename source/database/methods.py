@@ -15,7 +15,10 @@ class Methods:
 
     def __init__(self, **kwargs):
         self.__session = Session()
-        self.user = self.get_user_by_id(**kwargs) if kwargs else None
+        if kwargs.get('user'):
+            self.user = kwargs['user']
+        else:
+            self.user = self.get_user(**kwargs) if kwargs else None
 
     def add_user(self, user: User) -> None:
         self.__session.add(user)
@@ -38,7 +41,7 @@ class Methods:
         self.__session.delete(user)
         self.__session.commit()
 
-    def get_user_by_id(self, **kwargs) -> User:
+    def get_user(self, **kwargs) -> User:
         result = None
 
         if kwargs.get('vk_id'):
@@ -52,16 +55,14 @@ class Methods:
                       self.__session.query(service.Twitch).filter(service.Twitch.twitch_id == kwargs['twitch_id'])]
         elif kwargs.get('id'):
             result = [x for x in self.__session.query(User).filter(User.id == kwargs.get('id'))]
+        elif kwargs.get('email'):
+            result = [x for x in self.__session.query(User).filter(User.email == kwargs.get('email'))]
 
         if result:
             if issubclass(result[0].__class__, BaseServiceModel):
-                return self.get_user_by_id(id=result[0].external_id)
+                return self.get_user(id=result[0].external_id)
             else:
                 return result[0]
-
-    def get_user_by_email(self, email: str) -> User:
-        result = [x for x in self.__session.query(User).filter(User.email == email)]
-        return result[0] if result else None
 
     @__protected_active
     def set_points(self, value: int, service=None) -> None:
@@ -114,7 +115,7 @@ class Methods:
     @__protected_active
     def disintegrate_service(self, s_object: object) -> None:
         if not is_service_object(s_object):
-            raise TypeError('Not a serivce object')
+            raise TypeError('Not a service object')
 
         self.__session.delete(s_object)
         self.__session.commit()

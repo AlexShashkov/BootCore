@@ -1,5 +1,4 @@
 import requests
-
 from core import mail_conf
 
 

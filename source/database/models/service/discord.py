@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, ForeignKey, String
 
 from source.database import Base
 from source.database.models.user import User
-from .base_model import BaseServiceModel
+from ._base_model import BaseServiceModel
 
 
 class Discord(Base, BaseServiceModel):

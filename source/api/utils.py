@@ -1,14 +1,14 @@
 import json
 
 
-def check_args_important(_args, **kwargs):
+def check_args_important(_args, **kwargs) -> bool:
     for x in _args:
         if x not in kwargs.keys() or (not kwargs.get(x) and kwargs.get(x) != 0):
             return False
     return True
 
 
-def check_args_non_important(_args, **kwargs):
+def check_args_non_important(_args, **kwargs) -> bool:
     for x in _args:
         if kwargs.get(x) or kwargs.get(x) == 0:
             return True

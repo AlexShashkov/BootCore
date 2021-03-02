@@ -20,7 +20,8 @@ class User(Base, BaseModel):
     discord = relationship('Discord', backref='discord', uselist=False)
     twitch = relationship('Twitch', backref='twitch', uselist=False)
 
-    def __init__(self, status='inactive', email=None, points=0, note=None, registered_ts=int(datetime.now(timezone('Europe/Moscow')).timestamp())):
+    def __init__(self, status='inactive', email=None, points=0, note=None,
+                 registered_ts=int(datetime.now(timezone('Europe/Moscow')).timestamp())):
         self.points = points
         self.registered_ts = registered_ts
         self.status = status
