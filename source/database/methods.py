@@ -1,7 +1,7 @@
 from . import Session
+from .exceptions import NotActive
 from .models import *
 from .utils import *
-from .exceptions import NotActive
 
 
 class Methods:
@@ -44,15 +44,15 @@ class Methods:
     def get_user(self, **kwargs) -> User:
         result = None
 
-        if kwargs.get('vk_id'):
-            result = [x for x in self.__session.query(service.VK).filter(service.VK.vk_id == kwargs['vk_id'])]
-        elif kwargs.get('discord_id'):
+        if kwargs.get('vk'):
+            result = [x for x in self.__session.query(service.VK).filter(service.VK.vk_id == kwargs['vk'])]
+        elif kwargs.get('discord'):
             result = [x for x in
                       self.__session.query(service.Discord).filter(
-                          service.Discord.discord_id == kwargs['discord_id'])]
-        elif kwargs.get('twitch_id'):
+                          service.Discord.discord_id == kwargs['discord'])]
+        elif kwargs.get('twitch'):
             result = [x for x in
-                      self.__session.query(service.Twitch).filter(service.Twitch.twitch_id == kwargs['twitch_id'])]
+                      self.__session.query(service.Twitch).filter(service.Twitch.twitch_id == kwargs['twitch'])]
         elif kwargs.get('id'):
             result = [x for x in self.__session.query(User).filter(User.id == kwargs.get('id'))]
         elif kwargs.get('email'):

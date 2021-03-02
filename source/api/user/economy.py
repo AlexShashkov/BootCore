@@ -13,7 +13,7 @@ def on_set_points(**kwargs):
     if not data.get('value'):
         return Reply.bad_request(error='Empty value passed')
 
-    if not kwargs.get(''):
+    if not kwargs.get('user'):
         return Reply.bad_request(error='Empty or invalid locators passed')
 
     methods = Methods(user=kwargs['user'])
@@ -36,7 +36,7 @@ def on_increase_points(**kwargs):
     if not data.get('value'):
         return Reply.bad_request(error='Empty value passed')
 
-    if not kwargs.get(''):
+    if not kwargs.get('user'):
         return Reply.bad_request(error='Empty or invalid locators passed')
 
     methods = Methods(user=kwargs['user'])
@@ -60,7 +60,7 @@ def on_decrease_points(**kwargs):
     if not data.get('value'):
         return Reply.bad_request(error='Empty value passed')
 
-    if not kwargs.get(''):
+    if not kwargs.get('user'):
         return Reply.bad_request(error='Empty or invalid locators passed')
 
     methods = Methods(user=kwargs['user'])
