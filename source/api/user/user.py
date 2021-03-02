@@ -6,7 +6,7 @@ from source.database.models.service.utils import *
 from ..utils import *
 
 
-@app.route('/api/', methods=['GET'])
+@app.route('/api/')
 def on_root():
     return Reply.ok()
 
