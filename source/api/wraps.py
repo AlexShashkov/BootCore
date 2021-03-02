@@ -1,6 +1,7 @@
 import functools
 from flask import request, abort
 from ..database.methods import Methods
+from core import api_conf
 
 
 def important_input(f):
@@ -16,8 +17,8 @@ def important_input(f):
 def protected(f):
     @functools.wraps(f)
     def decorated_function(*args, **kwargs):
-        # if not request.headers.get('XXX-CODE') == api_conf['secret_code']:
-        #     abort(403)
+        if not request.headers.get('XXX-CODE') == api_conf['secret_code']:
+            abort(403)
         return f(*args, **kwargs)
 
     return decorated_function
