@@ -1,6 +1,6 @@
 import json
 
-__version__ = '0.2.2'
+__version__ = '0.2.3'
 
 config = json.load(open('config.json', 'r'))
 

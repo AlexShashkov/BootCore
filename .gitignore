@@ -8,3 +8,4 @@ source/index.rst
 make.bat
 Makefile
 build/
+tests/

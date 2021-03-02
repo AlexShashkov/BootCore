@@ -1,8 +1,8 @@
 from source.api import app
-from source.database.models import *
-from source.mail import *
 from source.api.wraps import *
+from source.database.models import *
 from source.database.models.service.utils import *
+from source.mail import *
 from ..utils import *
 
 
@@ -69,10 +69,10 @@ def on_accept_email():
 @protected
 @user_required
 def on_get_user(**kwargs):
-    if not kwargs.get(''):
+    if not kwargs.get('user'):
         return Reply.bad_request(error='Empty or invalid locators passed')
 
-    methods = Methods(user=kwargs.get(''))
+    methods = Methods(user=kwargs.get('user'))
 
     _user = methods.user.get_dict()
 
