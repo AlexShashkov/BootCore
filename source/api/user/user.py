@@ -65,6 +65,58 @@ def on_accept_email():
         return Reply.bad_request(error='Invalid email')
 
 
+@app.route('/api/user/invoke_login_email', methods=['POST'])
+@protected
+def on_invoke_login_email():
+    data = request.json
+
+    if not check_args_important(('email',), **data):
+        return Reply.bad_request(error='Empty important keys passed')
+
+    code = None
+    methods = Methods()
+    _user = methods.get_user(email=data['email'])
+
+    if not _user:
+        return Reply.conflict(error='User doesnt exists')
+    elif _user.status == 'inactive':
+        return Reply.conflict(error='User was not activated')
+
+    if methods.is_email_exists(data['email']) and not data.get('resend'):
+        return Reply.bad_request(error='Email already exists')
+    elif data.get('resend'):
+        user = methods.get_user(email=data['email'])
+        if not user or not user.note:
+            return Reply.bad_request(error='Invalid user')
+        code = user.note
+    elif not methods.user or methods.user.status == 'inactive':
+        code = generate_verification_code()
+        user.note = code
+        methods.update_user(user)
+
+    Mail.send_confirmation(to=data['email'], code=code)
+    return Reply.ok()
+
+@app.route('/api/user/accept_login_email', methods=['POST']) 
+@protected
+def on_accept_login_email():
+    data = request.json
+
+    if not check_args_important(('code', 'email'), **data):
+        return Reply.bad_request(error='Empty important keys passed')
+
+    methods = Methods()
+    user = methods.get_user(email=data['email'])
+    if user and user.status == 'active':
+        if user.note == data['code']:
+            user.note = ''
+            methods.update_user(user)
+            return Reply.ok(user_id=user.id)
+        else:
+            return Reply.bad_request(error='Invalid code')
+    else:
+        return Reply.bad_request(error='Invalid email')
+
 @app.route('/api/user/get', methods=['GET'])
 @protected
 @user_required
